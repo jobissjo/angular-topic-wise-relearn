@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Observable, from, fromEvent, of } from 'rxjs';
+import { Observable, filter, from, fromEvent, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -26,40 +26,62 @@ export class AppComponent {
 
   // myObservable = of(this.arr1, this.arr2,2,3,4);
 
-  @ViewChild('clickBtn') createBtn !:ElementRef;
-  @ViewChild('container') container !: ElementRef;
-  createBtnObs!:any ;
-  ngAfterViewInit(){
-    this.buttonClicked()
-  }
-  buttonClicked(){
-    let count = 0;
-    this.createBtnObs = fromEvent(this.createBtn.nativeElement, 'click').subscribe(
-      (data) => {
-        console.log(data);
-        this.showItem(++count)
-      }
-    )
-  }
+  // FROM EVENT 
+  
+  // @ViewChild('clickBtn') createBtn !:ElementRef;
+  // @ViewChild('container') container !: ElementRef;
+  // createBtnObs!:any ;
+  // ngAfterViewInit(){
+  //   this.buttonClicked()
+  // }
+  // buttonClicked(){
+  //   let count = 0;
+  //   this.createBtnObs = fromEvent(this.createBtn.nativeElement, 'click').subscribe(
+  //     (data) => {
+  //       console.log(data);
+  //       this.showItem(++count)
+  //     }
+  //   )
+  // }
 
-  showItem(val:number){
-    let div = document.createElement('div');
-    div.innerHTML = `Item ${val}`
-    div.className = 'data-list';
-    this.container.nativeElement.appendChild(div);
-  }
+  // showItem(val:number){
+  //   let div = document.createElement('div');
+  //   div.innerHTML = `Item ${val}`
+  //   div.className = 'data-list';
+  //   this.container.nativeElement.appendChild(div);
+  // }
 
   arr1 : number[] = [1,2,3,4,5,6];
   
   arr2 : string[] = ['a', 'b', 'c', 'd', 'e'];
-  myPromise = new Promise<string[]>((resolve, reject)=>{
-    resolve(this.arr2)
-  })
-  myObservable = from(this.myPromise)
+  // myPromise = new Promise<string[] | number[]>((resolve, reject)=>{
+  //   resolve(this.arr1)
+  // })
+
+  // map - rxjs
+
+  myObservable = from(this.arr1)
+  transformOBs = this.myObservable.pipe(map((val:any) =>{
+    return val*10;
+  }));
+
+  // filter -- rxjs
+
+  filteredObs = this.transformOBs.pipe(filter((val:number) =>{
+    return val  %  4 === 0
+  }))
+
+  // combine filter and map using pipe 
+
+  combineObs = this.myObservable.pipe(map((val:number) =>{
+    return val * 10;
+  }),
+  filter((val:number)=>{
+    return val % 4 == 0;
+  }))
 
   getAsyncDate(){
     // OLD METHOD
-
     // this.myObservable.subscribe((response:any)=> {
     //   this.data.push(response);
     // },
@@ -72,7 +94,7 @@ export class AppComponent {
 
     // NEW METHOD
 
-    this.myObservable.subscribe({
+    this.combineObs.subscribe({
       // if we specify normal function for next, then this key word
       // will reference subscribe function not the current components so use arrow func
       next:(val:number | string | number[] | string[]) =>{
