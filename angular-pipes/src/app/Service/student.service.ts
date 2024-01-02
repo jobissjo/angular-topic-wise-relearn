@@ -22,6 +22,10 @@ export class StudentService {
   CreateStudent(name: string, gender: string, dob: Date, course: string, marks: number, fee: number) {
     let id = this.students.length + 1;
     let student = new Student(id, name, gender, dob, course, marks, fee);
+    
+    // let allStudents = [...this.students]; 
+    // allStudents.push(student)
+    // this.students = allStudents.slice();
     this.students.push(student);
   }
 }

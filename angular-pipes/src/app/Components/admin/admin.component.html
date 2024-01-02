@@ -6,7 +6,7 @@
             <h2>Student Management</h2>
         </div>
         <div class="admin-header-filter">
-            <select name="gender" class="filter-select">
+            <select [(ngModel)]="filterText"  name="gender" class="filter-select">
                 <option value="All">All</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -81,7 +81,7 @@
             <!--INSERT NEW STUDENT ROW ENDS-->
 
             <!--DISPLAY ALL STUDENTS FROM STUDENTS ARRAY-->
-            <tr *ngFor="let std of students">
+            <tr *ngFor="let std of students | filter: filterText" >
                 <td>{{ std.id }}</td>
 
                 <td *ngIf="!isEditing || std.id !== stdIdToEdit">{{ std.name }}</td>
@@ -116,9 +116,9 @@
                     <input type="number" min="0" max="600" [value]="std.marks" #editMarks>
                 </td>
 
-                <td>{{ (std.marks / totalMarks) | percent : '2.0-2' }}</td>
+                <td>{{ (std.marks ) | percentage : totalMarks: 2}}</td>
 
-                <td *ngIf="!isEditing || std.id !== stdIdToEdit">{{ std.fee | currency: 'INR': true: '3.2-2'}}</td>
+                <td *ngIf="!isEditing || std.id !== stdIdToEdit">{{ std.fee | currency: 'INR': 'symbol': '3.2-2'}}</td>
                 <td *ngIf="isEditing && std.id === stdIdToEdit">
                     <input type="number" min="0" [value]="std.fee" #editFee>
                 </td>
