@@ -16,8 +16,14 @@ export class AdminComponent {
 
   students: Student[] = [];
   totalMarks: number = 0;
+  
 
   filterText :string = 'All';
+  totalStudents = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve(this.students.length)
+    }, 2000)
+  })
 
   //PROPERTIES FOR INSERTING
   @ViewChild('name') Name!: ElementRef;
@@ -40,6 +46,12 @@ export class AdminComponent {
     this.totalMarks = this.studentService.totalMarks;
   }
 
+  onFilterChange(event:Event){
+    this.filterText = (event.target as HTMLInputElement)?.value;
+    
+    this.students = this.studentService.filterByGender(this.filterText)
+  }
+
   OnInsertClicked() {
     this.isInserting = true;
   }
@@ -56,11 +68,15 @@ export class AdminComponent {
       this.Fee.nativeElement.value
     );
     this.isInserting = false;
+
+    this.studentService.filterByGender(this.filterText)
   }
 
   OnEditClicked(stdId: number) {
     this.isEditing = true;
     this.stdIdToEdit = stdId;
+
+    
   }
   OnEditCancelled() {
     this.isEditing = false;
@@ -75,5 +91,7 @@ export class AdminComponent {
     student.fee = this.editFee.nativeElement.value;
 
     this.isEditing = false;
+
+    this.students = this.studentService.filterByGender(this.filterText);
   }
 }

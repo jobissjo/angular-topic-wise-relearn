@@ -22,10 +22,23 @@ export class StudentService {
   CreateStudent(name: string, gender: string, dob: Date, course: string, marks: number, fee: number) {
     let id = this.students.length + 1;
     let student = new Student(id, name, gender, dob, course, marks, fee);
-    
+
     // let allStudents = [...this.students]; 
     // allStudents.push(student)
     // this.students = allStudents.slice();
+    // this is code
+
     this.students.push(student);
+  }
+
+
+  filterByGender(filterBy:string) {
+    if (filterBy.toLowerCase() === 'all' || filterBy === '' || this.students.length === 0)
+      return this.students;
+    else {
+      return this.students.filter((val) => {
+        return val.gender.toLowerCase() === filterBy.toLowerCase();
+      })
+    }
   }
 }
