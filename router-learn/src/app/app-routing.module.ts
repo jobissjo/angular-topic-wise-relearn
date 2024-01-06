@@ -6,15 +6,21 @@ import { AboutComponent } from './components/about/about.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { CourseDetailsComponent } from './components/course-details/course-details.component';
+import { PopularComponent } from './components/popular/popular.component';
 
 const routes: Routes = [
   // {path:'', redirectTo:'home', pathMatch:'full'},
   {path: '', component:HomeComponent},
   {path:'home', component:HomeComponent},
-  {path:'course', component:CoursesComponent},
   {path: 'about', component:AboutComponent},
   {path: 'contact', component:ContactComponent},
-  {path:'course/:id', component:CourseDetailsComponent},
+  {path:'course', component:CoursesComponent},
+  {path: 'course', children:[
+    {path:'popular',component:PopularComponent},
+    {path:':id',component:CourseDetailsComponent},
+    
+  ]},
+  // {path:'course/:id', component:CourseDetailsComponent},
   {path: '**', component:NotFoundComponent}
 ];
 
