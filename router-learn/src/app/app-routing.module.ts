@@ -7,6 +7,10 @@ import { ContactComponent } from './components/contact/contact.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { CourseDetailsComponent } from './components/course-details/course-details.component';
 import { PopularComponent } from './components/popular/popular.component';
+import { LoginComponent } from './components/login/login.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { AuthGuardService } from './services/auth-guard.service';
+import { canActivateLogin } from './guards/auth.guard';
 
 const routes: Routes = [
   // {path:'', redirectTo:'home', pathMatch:'full'},
@@ -17,9 +21,11 @@ const routes: Routes = [
   {path:'course', component:CoursesComponent},
   {path: 'course', children:[
     {path:'popular',component:PopularComponent},
-    {path:':id',component:CourseDetailsComponent},
+    {path: 'checkout', component:CheckoutComponent, canActivate: [canActivateLogin]},
+    {path:':id',component:CourseDetailsComponent}, 
     
   ]},
+  {path: 'login', component:LoginComponent},
   // {path:'course/:id', component:CourseDetailsComponent},
   {path: '**', component:NotFoundComponent}
 ];

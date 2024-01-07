@@ -17,6 +17,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { CourseDetailsComponent } from './components/course-details/course-details.component';
 import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './components/login/login.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { FormsModule } from '@angular/forms';
     HeaderComponent,
     FooterComponent,
     NotFoundComponent,
-    CourseDetailsComponent
+    CourseDetailsComponent,
+    LoginComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,
