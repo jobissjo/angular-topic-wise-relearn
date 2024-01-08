@@ -20,7 +20,7 @@ export class CoursesComponent implements OnInit {
       this.searchString = val.get('search');
 
       if (!this.searchString) {
-        this.AllCourses = this.coursesService.courses;
+        this.AllCourses = this.activateRoute.snapshot.data['course']
       }
       else {
         this.AllCourses = this.coursesService.courses.filter((course) => {

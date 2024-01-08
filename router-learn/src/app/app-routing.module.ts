@@ -10,18 +10,20 @@ import { PopularComponent } from './components/popular/popular.component';
 import { LoginComponent } from './components/login/login.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { AuthGuardService } from './services/auth-guard.service';
-import { canActivateLogin } from './guards/auth.guard';
+import { canActivateChildLogin, canActivateLogin, resolve } from './guards/auth.guard';
 
 const routes: Routes = [
   // {path:'', redirectTo:'home', pathMatch:'full'},
   {path: '', component:HomeComponent},
   {path:'home', component:HomeComponent},
   {path: 'about', component:AboutComponent},
-  {path: 'contact', component:ContactComponent},
-  {path:'course', component:CoursesComponent},
-  {path: 'course', children:[
+  {path: 'contact', component:ContactComponent, canDeactivate:[(comp: ContactComponent) => {return comp.canExit()} ]},
+  // 
+  {path:'course', component:CoursesComponent, resolve: {course: resolve}},
+  {path: 'course',canActivateChild: [canActivateChildLogin] ,children:[
     {path:'popular',component:PopularComponent},
-    {path: 'checkout', component:CheckoutComponent, canActivate: [canActivateLogin]},
+    {path: 'checkout', component:CheckoutComponent},
+    // , canActivate: [canActivateLogin]
     {path:':id',component:CourseDetailsComponent}, 
     
   ]},
