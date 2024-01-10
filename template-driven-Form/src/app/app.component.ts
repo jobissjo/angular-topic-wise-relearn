@@ -62,6 +62,7 @@ export class AppComponent {
       console.log('Form is valid');
       this.personDetails = this.myForm.value;
       this.isPersonDetailAvailable = true;
+      this.myForm.reset()
     }
   }
 
