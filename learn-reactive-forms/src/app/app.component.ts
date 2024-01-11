@@ -16,23 +16,21 @@ export class AppComponent implements OnInit {
       firstName : new FormControl('', [Validators.required]),
       lastName: new FormControl('', Validators.required),
       email : new FormControl('', [Validators.required, Validators.email]),
-      phoneNumber: new FormControl(null),
+      // phoneNumber: new FormControl(null),
       dob : new FormControl(null),
       username:new FormControl(null),
       gender: new FormControl('male'),
       address: new FormGroup({
-        street:new FormControl(null),
-        country: new FormControl(null),
-        city: new FormControl(null),
+        street:new FormControl(null, Validators.required),
+        country: new FormControl('India'),
+        city: new FormControl(null, Validators.required),
         region: new FormControl(null),
-        postal: new FormControl(null)
+        postal: new FormControl(null, Validators.required)
       })
-
     })
   }
 
   formSubmit(){
-    console.log(this.reactiveForm);
-    
+    console.log(this.reactiveForm); 
   }
 }
