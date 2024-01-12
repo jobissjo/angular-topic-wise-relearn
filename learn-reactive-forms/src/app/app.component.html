@@ -56,6 +56,8 @@
     <div class="input-box address" formGroupName="address">
       <label>Address</label>
       <input type="text" placeholder="Street address" formControlName="street" />
+      <small *ngIf="reactiveForm.get('address.street')?.invalid && reactiveForm.get('address.street')?.touched">
+      street field is required</small>
       <div class="column">
         <div class="select-box">
           <select name="country" formControlName="country">
@@ -65,24 +67,30 @@
             <option>India</option>
             <option>Nepal</option>
           </select>
+          
         </div>
         <input type="text" placeholder="City" formControlName="city" />
+        <small *ngIf="reactiveForm.get('address.city')?.invalid && reactiveForm.get('address.city')?.touched">
+          city field is required</small>
       </div>
       <div class="column">
         <input type="text" placeholder="Region" formControlName="region" />
         <input type="number" placeholder="Postal code" formControlName="postal" />
+        <small *ngIf="reactiveForm.get('address.postal')?.invalid && reactiveForm.get('address.postal')?.touched">
+          postal field is required</small>
       </div>
     </div>
 
     <!--HTML for Skills Form Array -->
-    <!-- <div class="input-box skills" formArrayName="skills">
+    <div class="input-box skills" formArrayName="skills">
       <h4>Add Skills</h4>
-      <div class="column">
-        <input type="text" placeholder="Add Skill...">
-        <button type="button" class="btn-add-delete">Delete</button>
+      <div class="column" *ngFor="let control of skillsFormArray.controls; let i=index">
+        <input type="text" placeholder="Add Skill..." 
+         [formControlName]="i">
+        <button type="button" class="btn-add-delete" (click)="deleteSkill(i)">Delete</button>
       </div> 
     </div>
-    <button type="button" class="btn-add-delete">Add Skills</button> -->
+    <button type="button" class="btn-add-delete" (click)="addSkills()">Add Skills</button>
 
     <!--HTML for Experience Form Array -->
     <!-- <div class="input-box">
