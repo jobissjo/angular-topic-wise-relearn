@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CustomValidators } from './validators/customValidators.validator';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +17,8 @@ export class AppComponent implements OnInit {
   
   ngOnInit(): void {
     this.reactiveForm  = new FormGroup({
-      firstName : new FormControl('', [Validators.required]),
-      lastName: new FormControl('', Validators.required),
+      firstName : new FormControl('', [Validators.required, CustomValidators.noSpaceAllowed]),
+      lastName: new FormControl('', [Validators.required, CustomValidators.noSpaceAllowed]),
       email : new FormControl('', [Validators.required, Validators.email]),
       dob : new FormControl(null),
       username:new FormControl(null),
@@ -32,13 +33,22 @@ export class AppComponent implements OnInit {
       skills: new FormArray<FormControl>([
         new FormControl('', Validators.required),
       ]),
-      experience: new FormArray<FormGroup>([
-
+      experience: new FormArray([
+        new FormGroup({
+          company:new FormControl(null),
+          position: new FormControl(null),
+          totalExp: new FormControl(null),
+          startDate: new FormControl(null),
+          endDate: new FormControl(null)
+        })
       ])
     })
 
     this.skillsFormArray = this.reactiveForm.get('skills') as FormArray;
-    this.experienceArray = <FormArray>this.reactiveForm.get('experience');
+    this.experienceArray = this.reactiveForm.get('experience') as FormArray;
+
+    console.log(this.reactiveForm);
+    
   }  
   addSkills(){
     // (<FormArray>this.reactiveForm.get('skills'))
@@ -58,8 +68,7 @@ export class AppComponent implements OnInit {
       startDate: new FormControl(null),
       endDate: new FormControl(null)
     })
-    this.experienceArray.push(formGroup)
-    // this.experienceArray.length;
+    this.experienceArray.push(formGroup);
   }
 
   deleteExp(index:number){
