@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
 
   reactiveForm !: FormGroup;
   skillsFormArray!:FormArray;
+  experienceArray!:FormArray
 
   
   ngOnInit(): void {
@@ -30,10 +31,14 @@ export class AppComponent implements OnInit {
       }),
       skills: new FormArray<FormControl>([
         new FormControl('', Validators.required),
+      ]),
+      experience: new FormArray<FormGroup>([
+
       ])
     })
 
     this.skillsFormArray = this.reactiveForm.get('skills') as FormArray;
+    this.experienceArray = <FormArray>this.reactiveForm.get('experience');
   }  
   addSkills(){
     // (<FormArray>this.reactiveForm.get('skills'))
@@ -43,6 +48,22 @@ export class AppComponent implements OnInit {
 
   deleteSkill(index:number){
     this.skillsFormArray.removeAt(index);
+  }
+
+  addExperience(){
+    let formGroup = new FormGroup({
+      company:new FormControl(null),
+      position: new FormControl(null),
+      totalExp: new FormControl(null),
+      startDate: new FormControl(null),
+      endDate: new FormControl(null)
+    })
+    this.experienceArray.push(formGroup)
+    // this.experienceArray.length;
+  }
+
+  deleteExp(index:number){
+    this.experienceArray.removeAt(index)
   }
 
   formSubmit(){

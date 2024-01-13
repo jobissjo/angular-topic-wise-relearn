@@ -93,13 +93,16 @@
     <button type="button" class="btn-add-delete" (click)="addSkills()">Add Skills</button>
 
     <!--HTML for Experience Form Array -->
-    <!-- <div class="input-box">
-      <div class="experience">
+
+    <div class="input-box" *ngIf="experienceArray.length">
+      <div class="experience"
+      *ngFor="let control of experienceArray.controls; let i = index" formGroupName="experience">
+      <!-- <div [formGroup]="control"> -->
         <label>Experience</label>
-        <input type="text" placeholder="Company Name" />
+        <input type="text" placeholder="Company Name" formControlName="company" />
         <div class="column">
           <div class="select-box">
-            <select>
+            <select formControlName="position">
               <option hidden>Position</option>
               <option>Junior Developer</option>
               <option>Software Developer</option>
@@ -107,16 +110,17 @@
               <option>Team Lead</option>
             </select>
           </div>
-          <input type="number" placeholder="Experience" />
+          <input type="number" placeholder="Experience" formArrayName="totalExp" />
         </div>
         <div class="column">
-          <input type="date" placeholder="Start Date" />
-          <input type="date" placeholder="End Date" />
+          <input type="date" placeholder="Start Date" formControlName="startDate" />
+          <input type="date" placeholder="End Date" formControlName="endDate" />
         </div>
-        <button type="button" class="btn-add-delete">Delete Experience</button>
+        <button type="button" class="btn-add-delete" (click)="deleteExp(i)">Delete Experience</button>
       </div>
-    </div> 
-    <button type="button" class="btn-add-delete">Add Experience</button> -->
+    </div>
+    <!-- </div>  -->
+    <button type="button" class="btn-add-delete" (click)="addExperience()">Add Experience</button>
 
     <input type="submit" value="Submit" class="submit-btn" [disabled]="!reactiveForm.valid">  
     
