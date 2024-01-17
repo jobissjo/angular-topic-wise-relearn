@@ -5,8 +5,6 @@ import { Directive, ViewContainerRef } from "@angular/core";
 })
 
 export class ViewContainer{
-    viewContainer :ViewContainerRef;
-    constructor(viewContainer:ViewContainerRef){
-        this.viewContainer = viewContainer;
+    constructor(public viewContainer:ViewContainerRef){
     }
 }

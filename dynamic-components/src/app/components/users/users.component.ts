@@ -3,6 +3,7 @@ import { User } from 'src/app/Models/User';
 import { UserService } from 'src/app/Services/user.service';
 import { ConfirmDeleteComponent } from '../confirm-delete/confirm-delete.component';
 import { ViewContainer } from 'src/app/directives/view-container.directive';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -12,7 +13,8 @@ import { ViewContainer } from 'src/app/directives/view-container.directive';
 export class UsersComponent {
   showConfirmDelete: boolean = false;
   userToDelete!: User;
-  @ViewChild(ViewContainer) container!: ViewContainer;
+  onConfirmObs!:Subscription;
+  @ViewChild(ViewContainer, {static:false}) container!: ViewContainer;
   constructor(private userService: UserService, private companyFacResolver:ComponentFactoryResolver) {
 
   }
@@ -25,6 +27,7 @@ export class UsersComponent {
   deleteUser(user: User) {
     this.showConfirmDelete = true;
     this.userToDelete = user;
+    this.showConfirmDeleteFn(this.userToDelete)
   }
 
   onConfirmationDelete(value: boolean) {
@@ -35,14 +38,21 @@ export class UsersComponent {
     }
   }
 
-  showConfirmDeleteFn(){
+  showConfirmDeleteFn(user:User){
     const confirmDelFactory = this.companyFacResolver.resolveComponentFactory(ConfirmDeleteComponent);
 
-    const containerViewRef = this.container.viewContainer;
+    const containerViewRef = this.container?.viewContainer;
 
     containerViewRef.clear();
 
-    containerViewRef.createComponent(confirmDelFactory)
+    const componentRef = containerViewRef.createComponent(confirmDelFactory);
+    componentRef.instance.deleteUser= user;
+    this.onConfirmObs = componentRef.instance.OnConfirmation.subscribe((data)=> {
+      this.onConfirmObs.unsubscribe();
+      containerViewRef.clear()
+      if(data)
+        this.userService.deleteUser(user);
+    })
     
   }
 }
