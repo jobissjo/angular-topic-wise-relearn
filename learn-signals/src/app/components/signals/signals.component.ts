@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-signals',
@@ -6,17 +6,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./signals.component.scss']
 })
 export class SignalsComponent {
-  counter: number = 0;
+  counter = signal(0);
 
   message: string[] = [];
 
   increment(){
-   this.counter++;
-   this.message.push('Current counter value is: ' + this.counter);
+  //  this.counter.set( this.counter() + 1);
+  this.counter.update(()=> this.counter() + 1);
+   this.message.push('Current counter value is: ' + this.counter());
   }
 
   decrement(){
-   this.counter--;
-   this.message.pop();
+    if (this.counter() > 0){
+      // this.counter.set(this.counter() - 1);
+      this.counter.update(()=> this.counter() + 1)
+      this.message.pop();
+    }
   }
 }
