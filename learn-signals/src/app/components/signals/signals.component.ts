@@ -1,4 +1,5 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed, effect } from '@angular/core';
+
 
 @Component({
   selector: 'app-signals',
@@ -10,24 +11,31 @@ export class SignalsComponent {
 
   // message: string[] = [];
   message = signal<string[]>([])
+  doubleCounter = computed(() => this.counter() * 2);
+  whatever = effect(()=> console.log("Current counter value is: " + this.counter()))
 
-  increment(){
+constructor(){
+  console.log('function log');
   
-  this.counter.update(()=> this.counter() + 1);
+}
+
+increment(){
+
+  this.counter.update(() => this.counter() + 1);
   // this.message.update((prevMsg)=> [...prevMsg, 'Current counter value is: ' + this.counter()]);
 
-  this.message.mutate((prevMsg)=> prevMsg.push('Current counter value is: ' + this.counter()))
+  this.message.mutate((prevMsg) => prevMsg.push('Current counter value is: ' + this.counter()))
 
   //  this.counter.set( this.counter() + 1);
   //  this.message.push('Current counter value is: ' + this.counter());
-  
-  }
 
-  decrement(){
-    if (this.counter() > 0){
-      // this.counter.set(this.counter() - 1);
-      this.counter.update(()=> this.counter() + 1)
-      this.message.mutate((preMsg)=> preMsg.pop());
-    }
+}
+
+decrement(){
+  if (this.counter() > 0) {
+    // this.counter.set(this.counter() - 1);
+    this.counter.update(() => this.counter() + 1)
+    this.message.mutate((preMsg) => preMsg.pop());
   }
+}
 }
