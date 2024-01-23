@@ -7,6 +7,5 @@ export class Task {
         public priority:string,
         public status:string
         ){
-
         }
 }
