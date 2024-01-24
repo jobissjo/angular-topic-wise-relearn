@@ -11,7 +11,9 @@ import { map } from 'rxjs';
 export class DashboardComponent implements OnInit{
   taskUrl:string = 'https://angular-http-2cf2a-default-rtdb.firebaseio.com/tasks.json';
   showCreateTaskForm: boolean = false;
-  http:HttpClient = inject(HttpClient)
+  http:HttpClient = inject(HttpClient);
+
+  allTasks:Task[]= [];
   
   ngOnInit(){
     this.fetchAllTasks();
@@ -30,7 +32,8 @@ export class DashboardComponent implements OnInit{
     const header = new HttpHeaders({'my-header':'whatever', 'made-by': 'jobi'})
     this.http.post(this.taskUrl, 
     data, {headers:header}).subscribe((response)=>{
-        console.log(response);   
+        console.log(response);
+        this.fetchAllTasks() 
     });
   }
 
@@ -46,7 +49,23 @@ export class DashboardComponent implements OnInit{
       }
       return tasks
     })).subscribe((response)=>{
-      console.log(response);
+      this.allTasks = response;
+    })
+  }
+
+  deleteTask(id:string|undefined){
+    console.log(id);
+    
+    this.http.delete(`${this.taskUrl.slice(0,this.taskUrl.length-5)}/${id}.json`).subscribe((data)=>{
+      console.log(data);
+      
+    });
+    this.fetchAllTasks()
+  }
+
+  deleteAllTasks(){
+    this.http.delete(`${this.taskUrl}`).subscribe((response)=>{
+      this.fetchAllTasks()
     })
   }
 
