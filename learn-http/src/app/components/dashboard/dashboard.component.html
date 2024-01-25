@@ -2,6 +2,8 @@
         *ngIf="showCreateTaskForm" 
         (CloseForm)="CloseCreateTaskForm()"
         (emitTaskDate)="createTaskData($event)"
+        [selectedTask]="selectedTask"
+        [isEditMode]="editMode"
 ></app-create-task>
 
 <div class="dashboard-container">
@@ -33,7 +35,7 @@
                     <button class="task-action-btn" title="Detail">
                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                     </button>
-                    <button class="task-action-btn" title="Edit">
+                    <button class="task-action-btn" title="Edit" (click)="updateTaskClicked(task)">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </button>
                     <button class="task-action-btn" title="Delete" (click)="deleteTask(task.id)">

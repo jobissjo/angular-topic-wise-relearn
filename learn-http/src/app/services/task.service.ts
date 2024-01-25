@@ -48,4 +48,12 @@ export class TaskService {
         return tasks;
       }))
   }
+
+  updateTask(id:string, task:Task){
+    this.http.put(`${this.taskUrl.slice(0, this.taskUrl.length - 5)}/${id}.json`, 
+    task).subscribe((response)=>{
+      console.log(response);
+      
+    })
+  }
 }

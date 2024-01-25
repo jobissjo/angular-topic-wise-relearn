@@ -1,10 +1,11 @@
 <div class="overlay">
     <div class="popup">
-        <h2>Create a new Task</h2>
+        <h2>{{ isEditMode ? 'Update': 'Create a new' }} Task</h2>
         <a class="close" href="#" (click)="OnCloseForm()">&times;</a>
         <div class="content">
             <section class="container">
-                <form  class="form" #createTaskForm="ngForm" (ngSubmit)="OnFormSubmitted(createTaskForm)">
+                <form  class="form" #createTaskForm="ngForm" 
+                (ngSubmit)="OnFormSubmitted(createTaskForm)">
                     <div class="input-box">
                         <label>Title*</label>
                         <input type="text" name="title" ngModel required />
@@ -45,7 +46,7 @@
                             </div>
                         </div>
                     </div>
-                    <button>Create Task</button>
+                    <button>{{isEditMode ? 'Update Task': 'Create Task'}}</button>
                 </form>
             </section>
         </div>

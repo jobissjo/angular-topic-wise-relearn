@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Task } from 'src/app/Models/task';
-import {HttpClient, HttpHeaders} from '@angular/common/http'
-import { map } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
@@ -9,51 +8,69 @@ import { TaskService } from 'src/app/services/task.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit{
-  taskUrl:string = 'https://angular-http-2cf2a-default-rtdb.firebaseio.com/tasks.json';
+export class DashboardComponent implements OnInit {
+  taskUrl: string = 'https://angular-http-2cf2a-default-rtdb.firebaseio.com/tasks.json';
   showCreateTaskForm: boolean = false;
-  http:HttpClient = inject(HttpClient);
-  taskSer:TaskService = inject(TaskService);
-  allTasks:Task[]= [];
-  
-  ngOnInit(){
+  http: HttpClient = inject(HttpClient);
+  taskService: TaskService = inject(TaskService);
+  allTasks: Task[] = [];
+  selectedTask!: Task;
+  editMode:boolean = false;
+  currentTaskId:string = '';
+
+  ngOnInit() {
     this.fetchAllTasks();
   }
 
-  OpenCreateTaskForm(){
+  OpenCreateTaskForm() {
     this.showCreateTaskForm = true;
+    this.editMode = false;
+    this.selectedTask = {
+      title: '', desc: '', assignedTo: '',
+      createdAt: '', priority: '',status:''
+    }
   }
 
-  CloseCreateTaskForm(){
+  CloseCreateTaskForm() {
     this.showCreateTaskForm = false;
   }
 
-  createTaskData(data:Task){
-    
-    this.taskSer.createTask(data);
-    setTimeout(()=>{
+  createTaskData(data: Task) {
+    if(!this.editMode)
+      this.taskService.createTask(data);
+    else
+      this.taskService.updateTask(this.currentTaskId, data);
+    setTimeout(() => {
       this.fetchAllTasks()
-    },1000)
+    }, 1000)
   }
 
-  fetchAllTasks(){
-    this.taskSer.getAllTasks().subscribe((response)=>{
+  fetchAllTasks() {
+    this.taskService.getAllTasks().subscribe((response) => {
       this.allTasks = response;
     })
   }
 
-  deleteTask(id:string|undefined){
-    id && this.taskSer.deleteTask(id);
+  deleteTask(id: string | undefined) {
+    id && this.taskService.deleteTask(id);
     this.fetchAllTasks()
   }
 
-  deleteAllTasks(){
-    this.taskSer.deleteAllTasks();
+  deleteAllTasks() {
+    this.taskService.deleteAllTasks();
     this.fetchAllTasks()
   }
 
-  onEditTaskClicked(id:string | undefined){
-    
+  onEditTaskClicked(id: string | undefined) {
+
+  }
+
+  updateTaskClicked(task: Task) {
+    this.showCreateTaskForm = true;
+    if(task.id)
+      this.currentTaskId = task.id;
+    this.selectedTask = task;
+    this.editMode = true;
   }
 
 }
