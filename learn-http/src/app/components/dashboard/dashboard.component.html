@@ -1,10 +1,5 @@
-<app-create-task 
-        *ngIf="showCreateTaskForm" 
-        (CloseForm)="CloseCreateTaskForm()"
-        (emitTaskDate)="createTaskData($event)"
-        [selectedTask]="selectedTask"
-        [isEditMode]="editMode"
-></app-create-task>
+<app-create-task *ngIf="showCreateTaskForm" (CloseForm)="CloseCreateTaskForm()" (emitTaskDate)="createTaskData($event)"
+    [selectedTask]="selectedTask" [isEditMode]="editMode"></app-create-task>
 
 <div class="dashboard-container">
     <div style="display: flex;">
@@ -21,9 +16,11 @@
     <hr>
 
     <div class="dashboard-item-container">
+        <div *ngIf="isLoading" class="loader"></div>
         <div *ngIf="!allTasks.length">
             <h2>No Tasks has been created Yet</h2>
         </div>
+        <ng-container *ngIf="!isLoading">
             <div class="task-item" *ngFor="let task of allTasks" [ngClass]="['task-'+task.status]">
                 <div class="task-title">
                     <h3>{{task.title}}</h3>
@@ -40,8 +37,9 @@
                     </button>
                     <button class="task-action-btn" title="Delete" (click)="deleteTask(task.id)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
-                    </button>            
+                    </button>
                 </div>
             </div>
+        </ng-container>
     </div>
 </div>

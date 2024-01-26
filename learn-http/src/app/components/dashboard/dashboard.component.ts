@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Task } from 'src/app/Models/task';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit {
   selectedTask!: Task;
   editMode:boolean = false;
   currentTaskId:string = '';
+  isLoading:boolean = true;
 
   ngOnInit() {
     this.fetchAllTasks();
@@ -48,6 +49,7 @@ export class DashboardComponent implements OnInit {
   fetchAllTasks() {
     this.taskService.getAllTasks().subscribe((response) => {
       this.allTasks = response;
+      this.isLoading = false;
     })
   }
 
