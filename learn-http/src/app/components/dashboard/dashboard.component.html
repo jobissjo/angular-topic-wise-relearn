@@ -16,8 +16,9 @@
     <hr>
 
     <div class="dashboard-item-container">
+        <div *ngIf="errorMessage" class="sb sb-error">{{errorMessage}}</div>
         <div *ngIf="isLoading" class="loader"></div>
-        <div *ngIf="!allTasks.length">
+        <div *ngIf="allTasks.length<1">
             <h2>No Tasks has been created Yet</h2>
         </div>
         <ng-container *ngIf="!isLoading">
