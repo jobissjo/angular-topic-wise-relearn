@@ -17,6 +17,9 @@ export class AuthService {
       console.log(response);
       localStorage.setItem('token','true');
       this.router.navigate(['dashboard']);
+      if(response.user?.emailVerified == true){
+        this.router.navigate(['navigate'])
+      }
     }, err =>{
       alert('Something went wrong!!');
       this.router.navigate(['login']);
@@ -26,10 +29,9 @@ export class AuthService {
   register(email:string, password:string){
     this.fireAuth.createUserWithEmailAndPassword(email, password)
       .then((response)=>{
-        console.log(response);
-        
         alert("Registration Successful");
         this.router.navigate(['login']);
+        this.sendEmailVerification(response.user)
       }, (err) => {
         alert(err.message)
       })
@@ -43,5 +45,26 @@ export class AuthService {
     }, (err)=>{
       alert(err.message)
     })
+  }
+
+  //forgot password
+  forgotPassword(email:string){
+    this.fireAuth.sendPasswordResetEmail(email).then(response=>{
+      console.log(response);     
+      this.router.navigate(['verify-email'])
+    }, error=>{
+      
+    })
+  }
+
+  //send email verification
+  sendEmailVerification(user:any){
+    user.sendEmailVerification().then((response:any)=>{
+      console.log(response);
+      
+      this.router.navigate(['verify-email']);
+    }, (err:any)=>{
+        alert("SOMETHING WENT WRONG")
+    });
   }
 }

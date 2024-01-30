@@ -22,6 +22,11 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.fetchAllTasks();
+    this.taskService.errorSubject.subscribe({
+      next:(errorResponse:HttpErrorResponse)=>{
+        this.setErrorMessage(errorResponse);
+      }
+    })
   }
 
   OpenCreateTaskForm() {
@@ -62,9 +67,14 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  private setErrorMessage(_err: HttpErrorResponse) {
-    this.errorMessage = "You can't perform this action in this page😒"
-    this.isLoading = false;
+  private setErrorMessage(err: HttpErrorResponse) {
+    if(err.status == 401){
+      this.errorMessage = "You can't perform this action in this page😒"
+      this.isLoading = false;
+    }
+    else{
+      this.errorMessage = err.message;
+    }
 
   }
 
