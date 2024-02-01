@@ -20,6 +20,9 @@ export class DashboardComponent implements OnInit {
   isLoading: boolean = true;
   errorMessage: string = '';
 
+  showTaskDetail:boolean = false;
+  currentTaskDetail!:Task;
+
   ngOnInit() {
     this.fetchAllTasks();
     this.taskService.errorSubject.subscribe({
@@ -98,6 +101,20 @@ export class DashboardComponent implements OnInit {
       this.currentTaskId = task.id;
     this.selectedTask = task;
     this.editMode = true;
+  }
+
+  onClickTaskDetails(id:string | undefined){
+    this.showTaskDetail = true;
+    if (id){
+      this.taskService.getTaskDetails(id).subscribe((response:Task)=>{
+        this.currentTaskDetail = response;
+      })
+    }
+      
+  }
+
+  closeTaskDetails(condition:boolean){
+    this.showTaskDetail = !condition;
   }
 
 }

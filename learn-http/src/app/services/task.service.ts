@@ -16,7 +16,7 @@ export class TaskService {
 
   createTask(task: Task) {
     const header = new HttpHeaders({ 'my-header': 'whatever', 'made-by': 'Jobi' })
-    this.http.post(this.taskUrl.slice(0, this.taskUrl.length - 1),
+    this.http.post(this.taskUrl,
       task, { headers: header })
       .pipe(catchError((err: HttpErrorResponse) => {
         const errorObj = { statusCode: err.status, errorMessage: err.message, datetime: new Date() }
@@ -102,5 +102,15 @@ export class TaskService {
         //   this.errorSubject.next(err);
         // }
       })
+  }
+
+  getTaskDetails(id: string) {
+    return this.http.get<Task>(`${this.taskUrl.slice(0, this.taskUrl.length - 5)}/${id}.json`)
+      .pipe(map((response) => {
+        console.log(response); 
+        let task = {...response, id:id}
+        return task;
+
+      }))
   }
 }
