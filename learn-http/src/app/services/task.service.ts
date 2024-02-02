@@ -68,7 +68,10 @@ export class TaskService {
   }
 
   getAllTasks() {
-    const headers = new HttpHeaders({ 'my-header': 'whatever', 'made-by': 'Jobi' });
+    let headers = new HttpHeaders();
+    headers = headers.set('content-type', 'application/json');
+    // headers = headers.set('content-type', 'html/json')
+    // headers.set('Access-Control-Origin-Access', '*')
 
     return this.http.get<{ [key: string]: Task }>(this.taskUrl,
       { headers: headers })
