@@ -1,8 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Task } from '../Models/task';
 import { Subject, map, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { LoggingService } from './logging.service';
 @Injectable({
   providedIn: 'root'
@@ -51,8 +51,15 @@ export class TaskService {
   }
 
   deleteAllTasks() {
-    this.http.delete(this.taskUrl)
-      .pipe(catchError((err: HttpErrorResponse) => {
+    this.http.delete(this.taskUrl, {observe:'events'})
+      .pipe(tap((event) =>{
+        if(event.type == HttpEventType.Sent)
+          console.log(event);
+        else
+          console.log("something else", event.type);
+        
+        
+      }), catchError((err: HttpErrorResponse) => {
         const errorObj = { statusCode: err.status, errorMessage: err.message, datetime: new Date() }
         this.logService.logError(errorObj);
         return throwError(() => err)
@@ -72,10 +79,15 @@ export class TaskService {
     headers = headers.set('content-type', 'application/json');
     // headers = headers.set('content-type', 'html/json')
     // headers.set('Access-Control-Origin-Access', '*')
+    let queryParams = new HttpParams();
+    queryParams = queryParams.set('page', 1);
+    queryParams = queryParams.set('item', 10)
 
-    return this.http.get<{ [key: string]: Task }>(this.taskUrl,
-      { headers: headers })
+    return this.http.get<{ [key: string]: Task }>(`${this.taskUrl}`,
+      { headers: headers, params: queryParams, observe:'body' })
       .pipe(map((response) => {
+        console.log(response);
+        
         let tasks: Task[] = [];
         for (let key in response) {
           if (response.hasOwnProperty(key)) {
@@ -110,8 +122,8 @@ export class TaskService {
   getTaskDetails(id: string) {
     return this.http.get<Task>(`${this.taskUrl.slice(0, this.taskUrl.length - 5)}/${id}.json`)
       .pipe(map((response) => {
-        console.log(response); 
-        let task = {...response, id:id}
+        console.log(response);
+        let task = { ...response, id: id }
         return task;
 
       }))
