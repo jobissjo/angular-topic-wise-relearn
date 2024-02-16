@@ -1,0 +1,17 @@
+<div class="app-login-form">
+    <h2>{{isLoggedInMode ? 'Login' : "SignUp"}} Here</h2>
+    <form #myForm="ngForm">
+        <div class="form-input">
+            <label>Email Address</label>
+            <input type="email" placeholder="Email address" name="email" ngModel>
+        </div>
+        <div class="form-input">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Password">
+        </div>           
+        <button type="submit" class="app-login-btn">{{isLoggedInMode ? 'Login' : "SignUp"}}</button>
+        <p> {{isLoggedInMode ? 'Do not have an accout yet?' : "Already have a account?"}}
+            <button type="submit" (click)="switchMode()" class="app-toggle-btn">{{isLoggedInMode ? 'SignUp' : "Login"}} Here.</button>
+        </p>
+    </form>
+</div>
