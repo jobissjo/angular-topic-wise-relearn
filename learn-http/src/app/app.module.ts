@@ -13,6 +13,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptorService } from './services/auth-interceptor.service';
 import { LoggingInterceptorService } from './services/loggin-interceptor.service';
 import { LoginComponent } from './components/login/login.component';
+import { LoaderComponent } from './components/utility/loader/loader.component';
+import { SnackbarComponent } from './components/utility/snackbar/snackbar.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { LoginComponent } from './components/login/login.component';
     HeaderComponent,
     CreateTaskComponent,
     TaskDetailsComponent,
-    LoginComponent
+    LoginComponent,
+    LoaderComponent,
+    SnackbarComponent,
   ],
   imports: [
     BrowserModule,

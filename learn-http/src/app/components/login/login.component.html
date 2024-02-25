@@ -1,17 +1,19 @@
 <div class="app-login-form">
     <h2>{{isLoggedInMode ? 'Login' : "SignUp"}} Here</h2>
-    <form #myForm="ngForm">
+    <app-snackbar [errorMessage]="errorMsg" *ngIf="errorMsg"></app-snackbar>
+    <app-loader *ngIf="isLoading"></app-loader>
+    <form #myForm="ngForm" (ngSubmit)="onFormSubmit(myForm)" *ngIf="!isLoading">
         <div class="form-input">
             <label>Email Address</label>
             <input type="email" placeholder="Email address" name="email" ngModel>
         </div>
         <div class="form-input">
             <label>Password</label>
-            <input type="password" name="password" placeholder="Password">
+            <input type="password" name="password" placeholder="Password" ngModel>
         </div>           
         <button type="submit" class="app-login-btn">{{isLoggedInMode ? 'Login' : "SignUp"}}</button>
         <p> {{isLoggedInMode ? 'Do not have an accout yet?' : "Already have a account?"}}
-            <button type="submit" (click)="switchMode()" class="app-toggle-btn">{{isLoggedInMode ? 'SignUp' : "Login"}} Here.</button>
+            <button type="button" (click)="switchMode()" class="app-toggle-btn">{{isLoggedInMode ? 'SignUp' : "Login"}} Here.</button>
         </p>
     </form>
 </div>

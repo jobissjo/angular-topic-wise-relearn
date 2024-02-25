@@ -6,7 +6,8 @@ export class AuthInterceptorService implements HttpInterceptor{
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log("Auth Interceptor called");
         
-        const modifiedReq= req.clone({headers:req.headers.append('auth', 'qwerty')})
+        const modifiedReq= req.clone();
+        // {headers:req.headers.append('auth', 'qwerty')}
 
         return next.handle(modifiedReq).pipe(tap((event)=>{
             if(event.type == HttpEventType.Response){
