@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthResponse } from 'src/app/Models/authResponse';
 import { AuthService } from 'src/app/services/auth.service';
@@ -17,7 +18,7 @@ export class LoginComponent {
   isLoading: boolean = false;
   errorMsg: string = '';
   authObs$!: Observable<AuthResponse>;
-
+  router:Router = inject(Router);
 
   switchMode() {
     this.isLoggedInMode = !this.isLoggedInMode;
@@ -41,8 +42,11 @@ export class LoginComponent {
       next: (res) => {
         console.log(res);
         this.isLoading = false;
+        this.router.navigate([''])
       },
       error: errMsg => {
+        console.log(errMsg);
+        
         this.isLoading = false;
         this.errorMsg = errMsg;
         this.hideSnackbar()

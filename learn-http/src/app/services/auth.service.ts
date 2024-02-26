@@ -29,8 +29,12 @@ export class AuthService {
   login(email: string, password: string) {
     const data = { email: email, password: password, returnSecureToken: true }
     return this.http.post<AuthResponse>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + this.apiKey,
-      data).pipe(catchError(this.handleErr),
-      tap(this.handleCreateUser))
+      data).pipe(catchError(err => {
+        return this.handleErr(err)
+      }),
+        tap((res) => {
+          this.handleCreateUser(res);
+        }))
   }
 
   private handleErr(err: any) {
@@ -55,11 +59,10 @@ export class AuthService {
     return throwError(() => errorMsg);
   }
 
-  private handleCreateUser(res:AuthResponse){
-    const expiresInTs = new Date().getTime() + +res.expiresIn* 1000;
-        const expiresIn = new Date(expiresInTs);
-        const user = new User(res.email, res.localId, res.idToken,  expiresIn);
-
-        return this.userSub.next(user);
+  private handleCreateUser(res: AuthResponse) {
+    const expiresInTs = new Date().getTime() + +res.expiresIn * 1000;
+    const expiresIn = new Date(expiresInTs);
+    const user = new User(res.email, res.localId, res.idToken, expiresIn);
+    this.userSub.next(user);
   }
 }
