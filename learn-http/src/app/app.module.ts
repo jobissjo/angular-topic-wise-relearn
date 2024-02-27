@@ -15,6 +15,7 @@ import { LoggingInterceptorService } from './services/loggin-interceptor.service
 import { LoginComponent } from './components/login/login.component';
 import { LoaderComponent } from './components/utility/loader/loader.component';
 import { SnackbarComponent } from './components/utility/snackbar/snackbar.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SnackbarComponent } from './components/utility/snackbar/snackbar.compon
     LoginComponent,
     LoaderComponent,
     SnackbarComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

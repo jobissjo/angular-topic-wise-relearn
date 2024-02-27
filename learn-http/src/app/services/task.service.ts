@@ -2,8 +2,10 @@ import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpParams }
 import { Injectable, inject } from '@angular/core';
 import { Task } from '../Models/task';
 import { Subject, map, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, exhaustMap, take, tap } from 'rxjs/operators';
 import { LoggingService } from './logging.service';
+import { AuthService } from './auth.service';
+import { User } from '../Models/user';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,6 +13,7 @@ export class TaskService {
   taskUrl = 'https://angular-http-2cf2a-default-rtdb.firebaseio.com/tasks.json';
   logService: LoggingService = inject(LoggingService)
   errorSubject = new Subject<HttpErrorResponse>();
+  authService: AuthService = inject(AuthService);
 
   constructor(private http: HttpClient) { }
 
@@ -51,14 +54,14 @@ export class TaskService {
   }
 
   deleteAllTasks() {
-    this.http.delete(this.taskUrl, {observe:'events'})
-      .pipe(tap((event) =>{
-        if(event.type == HttpEventType.Sent)
+    this.http.delete(this.taskUrl, { observe: 'events' })
+      .pipe(tap((event) => {
+        if (event.type == HttpEventType.Sent)
           console.log(event);
         else
           console.log("something else", event.type);
-        
-        
+
+
       }), catchError((err: HttpErrorResponse) => {
         const errorObj = { statusCode: err.status, errorMessage: err.message, datetime: new Date() }
         this.logService.logError(errorObj);
@@ -75,19 +78,9 @@ export class TaskService {
   }
 
   getAllTasks() {
-    let headers = new HttpHeaders();
-    headers = headers.set('content-type', 'application/json');
-    // headers = headers.set('content-type', 'html/json')
-    // headers.set('Access-Control-Origin-Access', '*')
-    let queryParams = new HttpParams();
-    queryParams = queryParams.set('page', 1);
-    queryParams = queryParams.set('item', 10)
 
-    return this.http.get<{ [key: string]: Task }>(`${this.taskUrl}`,
-      { headers: headers, params: queryParams, observe:'body' })
-      .pipe(map((response) => {
-        console.log(response);
-        
+    return this.http.get<{ [key: string]: Task }>(`${this.taskUrl}`).pipe(
+      map((response) => {
         let tasks: Task[] = [];
         for (let key in response) {
           if (response.hasOwnProperty(key)) {

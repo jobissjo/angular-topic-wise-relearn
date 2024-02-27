@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/Models/user';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -13,8 +14,9 @@ export class HeaderComponent implements OnInit{
   userSub !: Subscription;
 
   ngOnInit(){
-    this.userSub = this.authService.userSub.subscribe(()=>{
-      this.isLoggedIn = true
+    this.userSub = this.authService.userSub.subscribe((user:User) =>{
+      if(user.email != 'dummy@gmail.com')
+        this.isLoggedIn = !!user;
     })
   }
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { AuthResponse } from '../Models/authResponse';
-import { Subject, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Subject, catchError, tap, throwError } from 'rxjs';
 import { User } from '../Models/user';
 
 @Injectable({
@@ -11,7 +11,8 @@ export class AuthService {
   http: HttpClient = inject(HttpClient);
   error: string = ''
   private apiKey = 'AIzaSyCHG8CuaRYRxeFdFLFgwSWgnckIAwlkKuA';
-  userSub = new Subject<User>();
+  user = new User('dummy@gmail.com', '32423', 'fdsfgdskj234324', new Date());
+  userSub = new BehaviorSubject<User>(this.user);
   // constructor() { }
   signUp(email: string, password: string) {
     const data = { email: email, password: password, returnSecureToken: true }

@@ -42,7 +42,7 @@ export class LoginComponent {
       next: (res) => {
         console.log(res);
         this.isLoading = false;
-        this.router.navigate([''])
+        this.router.navigate(['dashboard'])
       },
       error: errMsg => {
         console.log(errMsg);
