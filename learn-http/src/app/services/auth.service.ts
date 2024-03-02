@@ -3,12 +3,15 @@ import { Injectable, inject } from '@angular/core';
 import { AuthResponse } from '../Models/authResponse';
 import { BehaviorSubject, Subject, catchError, tap, throwError } from 'rxjs';
 import { User } from '../Models/user';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   http: HttpClient = inject(HttpClient);
+  router:Router = inject(Router);
+  timerFunctionId:any;
   error: string = ''
   private apiKey = 'AIzaSyCHG8CuaRYRxeFdFLFgwSWgnckIAwlkKuA';
   user = new User('dummy@gmail.com', '32423', 'fdsfgdskj234324', new Date());
@@ -38,6 +41,40 @@ export class AuthService {
         }))
   }
 
+  logOut(){
+    this.userSub.next(this.user);
+    localStorage.removeItem('user');
+    this.router.navigate(['login']);
+
+    if(this.timerFunctionId){
+      clearTimeout(this.timerFunctionId)
+    }
+    
+  }
+
+  autoLogin(){
+    let user = localStorage.getItem('user');
+
+    if(user){
+      let tempUser = JSON.parse(user)
+      const userObj = new User(tempUser.email, tempUser.id, tempUser._token, tempUser._expiresIn);
+
+      if(userObj.token){
+        this.userSub.next(userObj);
+        let expireTime =  tempUser._expiresIn -  new Date().getTime() ;
+        this.autoLogout(expireTime);
+      }
+    }
+    // const user = JSON.parse()
+    
+  }
+
+  autoLogout(expiresTime:number){
+    this.timerFunctionId = setTimeout(()=> {
+      this.logOut();
+    }, expiresTime)
+  }
+
   private handleErr(err: any) {
 
     let errorMsg = "The unknown occurred";
@@ -65,5 +102,8 @@ export class AuthService {
     const expiresIn = new Date(expiresInTs);
     const user = new User(res.email, res.localId, res.idToken, expiresIn);
     this.userSub.next(user);
+    this.autoLogout(res.expiresIn * 1000)
+
+    localStorage.setItem('user', JSON.stringify(user));
   }
 }

@@ -17,10 +17,16 @@ export class HeaderComponent implements OnInit{
     this.userSub = this.authService.userSub.subscribe((user:User) =>{
       if(user.email != 'dummy@gmail.com')
         this.isLoggedIn = !!user;
+      else{
+        this.isLoggedIn = false;
+      }
     })
   }
 
   ngOnDestroy(){
     this.userSub.unsubscribe();
+  }
+  onClickLogout(){
+    this.authService.logOut()
   }
 }
