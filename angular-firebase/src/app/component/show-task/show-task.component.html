@@ -1,0 +1,12 @@
+<div class="show-task-container">
+    <h2>All Tasks</h2>
+    <div *ngFor="let task of tasks" class="task">
+      <h3>{{ task.title }}</h3>
+      <p>{{ task.description }}</p>
+      <p><strong>Due Date:</strong> {{ task.dueDate }}</p>
+    </div>
+    <div *ngIf="tasks.length === 0" class="no-tasks">
+      <p>No tasks available.</p>
+    </div>
+  </div>
+  
