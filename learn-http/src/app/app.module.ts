@@ -8,14 +8,13 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { CreateTaskComponent } from './components/create-task/create-task.component';
 import { TaskDetailsComponent } from './components/task-details/task-details.component';
-import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptorService } from './services/auth-interceptor.service';
-import { LoggingInterceptorService } from './services/loggin-interceptor.service';
-import { LoginComponent } from './components/login/login.component';
-import { LoaderComponent } from './components/utility/loader/loader.component';
-import { SnackbarComponent } from './components/utility/snackbar/snackbar.component';
+import {  HttpClientModule } from '@angular/common/http';
+// import { LoaderComponent } from './components/utility/loader/loader.component';
+// import { SnackbarComponent } from './components/utility/snackbar/snackbar.component';
 import { HomeComponent } from './components/home/home.component';
+import { CoreModule } from './core.module';
+import { SharedModule } from './shared.module';
+import { AuthModule } from './login/auth.module';
 
 @NgModule({
   declarations: [
@@ -25,20 +24,17 @@ import { HomeComponent } from './components/home/home.component';
     HeaderComponent,
     CreateTaskComponent,
     TaskDetailsComponent,
-    LoginComponent,
-    LoaderComponent,
-    SnackbarComponent,
     HomeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    CoreModule,
+    SharedModule,
   ],
   providers: [
-    {provide:HTTP_INTERCEPTORS, useClass:AuthInterceptorService,multi:true },
-    {provide:HTTP_INTERCEPTORS, useClass:LoggingInterceptorService,multi:true}
+    
   ],
   bootstrap: [AppComponent]
 })

@@ -5,7 +5,7 @@
     <div class="header-nav">
         <a *ngIf="isLoggedIn" routerLink="dashboard">DASHBOARD</a>
         <a  href="#">DETAILS</a>
-        <a *ngIf="!isLoggedIn" routerLink="login">LOGIN</a>
+        <a *ngIf="!isLoggedIn" routerLink="/auth/login">LOGIN</a>
         <a *ngIf="isLoggedIn" (click)="onClickLogout()">LOGOUT</a>
     </div>
 </header>

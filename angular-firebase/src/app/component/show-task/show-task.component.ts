@@ -12,10 +12,10 @@ export class ShowTaskComponent {
   taskService:TaskService = inject(TaskService);
 
   ngOnInit(){
-    this.taskService.getAllTask('whatever').subscribe(res => {
-      console.log(res);
+    // this.taskService.getAllTask('whatever').subscribe(res => {
+    //   console.log(res);
       
-      this.tasks = res;
-    })
+    //   this.tasks = res;
+    // })
   }
 }

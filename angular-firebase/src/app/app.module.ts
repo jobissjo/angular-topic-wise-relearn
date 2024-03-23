@@ -15,6 +15,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { CreateTaskComponent } from './component/create-task/create-task.component';
 import { ShowTaskComponent } from './component/show-task/show-task.component'
 import { AuthInterceptorService } from './service/auth-interceptor.service';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,7 @@ import { AuthInterceptorService } from './service/auth-interceptor.service';
     AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
-    
+    HttpClientModule,
   ],
   providers: [
     {provide:HTTP_INTERCEPTORS, useClass:AuthInterceptorService, multi:true}
